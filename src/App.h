@@ -4,6 +4,7 @@
 #include <oslib/oslib.h>
 #include <string>
 #include <deque>
+#include <map>
 #include "common.h"
 #include "Player.h"
 
@@ -15,6 +16,10 @@ public:
 	
 	void run();
 	
+	OSL_IMAGE* loadImagePNG(std::string filename, int flags = OSL_IN_VRAM | OSL_SWIZZLED, int format = OSL_PF_5551);
+	void unloadImage(std::string filename);
+	void unloadAllImages();
+	
 protected:
 	void parseArgs(int argc, const char **argv);
 	void initOSL();
@@ -22,13 +27,13 @@ protected:
 	void tick();
 	void draw();
 	
-	bool stringsEqual;
-	
 protected:
 	std::string appDir;
 	
 	Player *player;
 	std::deque<Thing *> enemies;
+	
+	std::map<std::string, OSL_IMAGE*> images;
 	
 	SceKernelUtilsMt19937Context mt_ctx;
 };

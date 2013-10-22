@@ -1,4 +1,5 @@
 #include "App.h"
+#include <iostream>
 #include "util.h"
 #include "Enemy.h"
 
@@ -9,10 +10,19 @@ App::App(int argc, const char **argv)
 	
 	sceKernelUtilsMt19937Init(&mt_ctx, time(NULL));
 	
-	OSL_IMAGE *shipSprite = oslLoadImageFilePNG((char*)"img/ship.png", OSL_IMAGE_SWIZZLED | OSL_IN_VRAM, OSL_PF_5551);
+	OSL_IMAGE *shipSprite = this->loadImagePNG("img/ship.png");
 	
 	player = new Player(this, shipSprite);
 	player->move(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+	
+	std::map<std::string, int> things;
+	things.insert(std::pair<std::string, int>("key1", 1));
+	things.insert(std::pair<std::string, int>("key2", 2));
+	
+	for(std::map<std::string, int>::iterator it = things.begin(); it != things.end(); it++)
+	{
+		std::cout << it->first << "=" << it->second << std::endl;
+	}
 }
 
 App::~App()
@@ -117,4 +127,46 @@ void App::draw()
 	
 	// Release stuff grabbed in oslStartDrawing()
 	oslEndDrawing();
+}
+
+OSL_IMAGE* App::loadImagePNG(std::string filename, int flags, int format)
+{
+	std::map<std::string, OSL_IMAGE*>::iterator it = images.find(filename);
+	if(it == images.end())
+	{
+		std::cout << "Loading image '" << filename << "'... (" << std::hex << flags << std::dec << ", " << format << ")" << std::endl;
+		char *filenameCStrDup = strdup(filename.c_str());
+		OSL_IMAGE *img = oslLoadImageFilePNG(filenameCStrDup, flags, format);
+		free(filenameCStrDup);
+		
+		images.insert(std::pair<std::string, OSL_IMAGE*>(filename, img));
+		return img;
+	}
+	else std::cout << "Image '" << filename << "' already loaded" << std::endl;
+	
+	return it->second;
+}
+
+void App::unloadImage(std::string filename)
+{
+	std::map<std::string, OSL_IMAGE*>::iterator it = images.find(filename);
+	if(it != images.end())
+	{
+		std::cout << "Unloading image '" << filename << "'..." << std::endl;
+		oslDeleteImage(it->second);
+		images.erase(it);
+	}
+	else std::cout << "Attempted to unload unknown image '" << filename << "'" << std::endl;
+}
+
+void App::unloadAllImages()
+{
+	std::cout << "Unloading all images... size=" << images.size() << std::endl;
+	for(std::map<std::string, OSL_IMAGE*>::iterator it = images.begin(); it != images.end(); it++)
+	{
+		std::cout << "-> " << it->first << std::endl;
+		oslDeleteImage(it->second);
+	}
+	images.clear();
+	std::cout << "Done." << std::endl;
 }
