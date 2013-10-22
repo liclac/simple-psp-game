@@ -15,24 +15,29 @@ public:
 	
 	virtual void tick();
 	virtual void draw();
-	virtual void fire(int vx, int vy, OSL_IMAGE *imageOverride = 0);
+	virtual void fire(float vx, float vy, OSL_IMAGE *imageOverride = 0);
 	
-	void move(int x, int y);
-	void moveBy(int dx, int dy);
+	void move(float x, float y);
+	void moveBy(float dx, float dy);
+	
+	void putInMotion(float vx, float vy);
 	
 	void resize(int width, int height);
 	void resizeBy(int dwidth, int dheight);
 	
-	int x, y;
-	int vx, vy;
-	OSL_IMAGE *image, *bulletImage;
+	float x, y;
+	float vx, vy;
 	
-	// Ignored if an image is present
-	int width, height;
+	inline int width() { return (this->image ? this->image->sizeX : this->_width); };
+	inline int height() { return (this->image ? this->image->sizeY : this->_height); };
+	
+	OSL_IMAGE *image, *bulletImage;
 	OSL_COLOR color;
 	
 protected:
 	std::deque<Bullet> ownedBullets;
+	
+	int _width, _height;
 	
 	App *app;
 };

@@ -9,6 +9,7 @@ App::App(int argc, const char **argv)
 	this->initOSL();
 	
 	sceKernelUtilsMt19937Init(&mt_ctx, time(NULL));
+	srand(time(NULL)); // In case I need it... I sure hope not.
 	
 	player = new Player(this, this->loadImagePNG("img/ship.png"));
 	player->move(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
@@ -100,7 +101,8 @@ void App::tick()
 	if(uRandomBool(&mt_ctx, kEnemySpawnRate))
 	{
 		Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"));
-		enemy->move(uRandomUIntBetween(&mt_ctx, SCREEN_WIDTH*0.75, SCREEN_WIDTH), uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT));
+		enemy->move(SCREEN_WIDTH + enemy->width()/2, uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT));
+		enemy->putInMotion(-uRandomFloatBetween(&mt_ctx, 0.1, 0.5), 0);
 		enemies.push_back(enemy);
 	}
 }
@@ -117,9 +119,9 @@ void App::draw()
 	oslDrawImage(bgImage);
 	
 	// Let objects draw themselves
-	player->draw();
 	for(std::deque<Thing*>::iterator it = enemies.begin(); it != enemies.end(); it++)
 		(*it)->draw();
+	player->draw();
 	
 	// Release stuff grabbed in oslStartDrawing()
 	oslEndDrawing();
@@ -155,7 +157,7 @@ void App::unloadImage(std::string filename)
 
 void App::unloadAllImages()
 {
-	std::cout << "Unloading all images... size=" << images.size() << std::endl;
+	std::cout << "Unloading all images... Total: " << images.size() << std::endl;
 	for(std::map<std::string, OSL_IMAGE*>::iterator it = images.begin(); it != images.end(); it++)
 	{
 		std::cout << "-> " << it->first << std::endl;

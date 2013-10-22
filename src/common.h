@@ -43,7 +43,7 @@
 #define kPlayerSpeed 4
 #define kPlayerSize 5
 
-#define kEnemySpawnRate 10
+#define kEnemySpawnRate 1
 #define kEnemyMaxCount 10
 
 #endif

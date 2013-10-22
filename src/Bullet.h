@@ -14,8 +14,8 @@ public:
 	virtual void draw();
 	
 	Thing *parent;
-	int x, y;
-	int vx, vy;
+	float x, y;
+	float vx, vy;
 	
 	int width();
 	int height();

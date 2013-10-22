@@ -43,13 +43,10 @@ void Player::checkActionControls()
 
 void Player::checkBounds()
 {
-	int width = (this->image ? this->image->sizeX : this->width);
-	int height = (this->image ? this->image->sizeY : this->height);
-	
-	int xMin = (width/2);
-	int xMax = (SCREEN_WIDTH - width/2);
-	int yMin = (height/2);
-	int yMax = (SCREEN_HEIGHT - height/2);
+	int xMin = (width()/2);
+	int xMax = (SCREEN_WIDTH - width()/2);
+	int yMin = (height()/2);
+	int yMax = (SCREEN_HEIGHT - height()/2);
 	
 	if(this->x < xMin) this->x = xMin;
 	else if(this->x > xMax) this->x = xMax;

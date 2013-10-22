@@ -4,8 +4,8 @@
 Thing::Thing(App *app, OSL_IMAGE *image, OSL_IMAGE *bulletImage):
 	x(0), y(0), vx(0), vy(0),
 	image(image), bulletImage(bulletImage),
-	width(20), height(20),
 	color(RGBA(0,0,0,255)),
+	_width(20), _height(20),
 	app(app)
 {
 	
@@ -31,21 +31,21 @@ void Thing::draw()
 	{
 		oslDrawImageXY(
 			this->image,
-			this->x - (this->image->sizeX/2),
-			this->y - (this->image->sizeY/2)
+			this->x - (this->width()/2),
+			this->y - (this->width()/2)
 		);
 	}
 	else
 	{
 		oslDrawFillRect(
-			this->x - (this->width/2), this->y - (this->height/2),
-			this->x + (this->width/2), this->y + (this->height/2),
+			this->x - (this->width()/2), this->y - (this->height()/2),
+			this->x + (this->width()/2), this->y + (this->height()/2),
 			this->color
 		);
 	}
 }
 
-void Thing::fire(int vx, int vy, OSL_IMAGE *imageOverride)
+void Thing::fire(float vx, float vy, OSL_IMAGE *imageOverride)
 {
 	Bullet bullet(this);
 	bullet.x = this->x;
@@ -57,8 +57,10 @@ void Thing::fire(int vx, int vy, OSL_IMAGE *imageOverride)
 	ownedBullets.push_back(bullet);
 }
 
-void Thing::move(int x, int y) { this->x = x; this->y = y; }
-void Thing::moveBy(int dx, int dy) { this->x += dx; this->y += dy; }
+void Thing::move(float x, float y) { this->x = x; this->y = y; }
+void Thing::moveBy(float dx, float dy) { this->x += dx; this->y += dy; }
 
-void Thing::resize(int width, int height) { this->width = width; this->height = height; }
-void Thing::resizeBy(int dwidth, int dheight) { this->width += dwidth; this->height += dheight; }
+void Thing::putInMotion(float vx, float vy) { this->vx = vx; this->vy = vy; }
+
+void Thing::resize(int width, int height) { this->_width = width; this->_height = height; }
+void Thing::resizeBy(int dwidth, int dheight) { this->_width += dwidth; this->_height += dheight; }
