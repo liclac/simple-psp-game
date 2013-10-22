@@ -32,6 +32,7 @@ protected:
 	
 	Player *player;
 	std::deque<Thing *> enemies;
+	OSL_IMAGE *bgImage;
 	
 	std::map<std::string, OSL_IMAGE*> images;
 	

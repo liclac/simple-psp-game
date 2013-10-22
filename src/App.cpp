@@ -10,10 +10,12 @@ App::App(int argc, const char **argv)
 	
 	sceKernelUtilsMt19937Init(&mt_ctx, time(NULL));
 	
-	OSL_IMAGE *shipSprite = this->loadImagePNG("img/ship.png");
-	
-	player = new Player(this, shipSprite);
+	player = new Player(this, this->loadImagePNG("img/ship.png"));
 	player->move(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+	
+	bgImage = this->loadImagePNG("img/bg.png");
+	bgImage->x = 0;
+	bgImage->y = 0;
 }
 
 App::~App()
@@ -109,7 +111,10 @@ void App::draw()
 	oslStartDrawing();
 	
 	// Clear the buffer to prevent ghosting
-	oslClearScreen(RGB(128, 0, 0));
+	oslClearScreen(RGB(0, 0, 0));
+	
+	// Draw a background
+	oslDrawImage(bgImage);
 	
 	// Let objects draw themselves
 	player->draw();
