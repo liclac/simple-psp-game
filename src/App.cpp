@@ -14,15 +14,6 @@ App::App(int argc, const char **argv)
 	
 	player = new Player(this, shipSprite);
 	player->move(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-	
-	std::map<std::string, int> things;
-	things.insert(std::pair<std::string, int>("key1", 1));
-	things.insert(std::pair<std::string, int>("key2", 2));
-	
-	for(std::map<std::string, int>::iterator it = things.begin(); it != things.end(); it++)
-	{
-		std::cout << it->first << "=" << it->second << std::endl;
-	}
 }
 
 App::~App()
