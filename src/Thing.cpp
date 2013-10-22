@@ -4,7 +4,7 @@
 Thing::Thing(App *app, OSL_IMAGE *image, OSL_IMAGE *bulletImage):
 	x(0), y(0), vx(0), vy(0),
 	image(image), bulletImage(bulletImage),
-	width(2), height(2),
+	width(20), height(20),
 	color(RGBA(0,0,0,255)),
 	app(app)
 {
@@ -22,7 +22,11 @@ void Thing::tick()
 
 void Thing::draw()
 {
-	// Draw the thing...
+	// Draw Bullets
+	for(std::deque<Bullet>::iterator it = this->ownedBullets.begin(); it != this->ownedBullets.end(); it++)
+		it->draw();
+	
+	// Draw the thing, either as an image or a small dot
 	if(image)
 	{
 		oslDrawImageXY(
@@ -39,10 +43,6 @@ void Thing::draw()
 			this->color
 		);
 	}
-	
-	//...and then its bullets.
-	for(std::deque<Bullet>::iterator it = this->ownedBullets.begin(); it != this->ownedBullets.end(); it++)
-		it->draw();
 }
 
 void Thing::fire(int vx, int vy, OSL_IMAGE *imageOverride)
