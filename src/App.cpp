@@ -106,7 +106,7 @@ void App::tick()
 	// Occasionally spawn enemies
 	if(uRandomBool(&mt_ctx, kEnemySpawnRate))
 	{
-		Enemy *enemy = new Enemy(this);
+		Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"));
 		enemy->move(uRandomUIntBetween(&mt_ctx, SCREEN_WIDTH*0.75, SCREEN_WIDTH), uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT));
 		enemies.push_back(enemy);
 	}
@@ -142,7 +142,6 @@ OSL_IMAGE* App::loadImagePNG(std::string filename, int flags, int format)
 		images.insert(std::pair<std::string, OSL_IMAGE*>(filename, img));
 		return img;
 	}
-	else std::cout << "Image '" << filename << "' already loaded" << std::endl;
 	
 	return it->second;
 }
@@ -156,7 +155,6 @@ void App::unloadImage(std::string filename)
 		oslDeleteImage(it->second);
 		images.erase(it);
 	}
-	else std::cout << "Attempted to unload unknown image '" << filename << "'" << std::endl;
 }
 
 void App::unloadAllImages()
