@@ -16,6 +16,9 @@ public:
 	Thing *parent;
 	int x, y;
 	int vx, vy;
+	
+	int width();
+	int height();
 	//OSL_IMAGE *image;
 };
 

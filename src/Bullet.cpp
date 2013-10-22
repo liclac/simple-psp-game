@@ -22,8 +22,11 @@ void Bullet::tick()
 void Bullet::draw()
 {
 	oslDrawFillRect(
-		this->x - 5, this->y - 1,
-		this->x + 5, this->y + 1,
+		this->x - width()/2, this->y - height()/2,
+		this->x + width()/2, this->y + height()/2,
 		RGB(255,0,0)
 	);
 }
+
+int Bullet::width() { return 10; }
+int Bullet::height() { return 2; }
