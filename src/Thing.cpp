@@ -2,7 +2,7 @@
 #include <iostream>
 
 Thing::Thing(App *app, OSL_IMAGE *image, OSL_IMAGE *bulletImage):
-	x(0), y(0),
+	x(0), y(0), vx(0), vy(0),
 	image(image), bulletImage(bulletImage),
 	width(2), height(2),
 	color(RGBA(0,0,0,255)),
