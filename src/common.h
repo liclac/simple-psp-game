@@ -42,8 +42,10 @@
  */
 #define kPlayerSpeed 4
 #define kPlayerSize 5
+#define kPlayerBulletSpeed 2
 
 #define kEnemySpawnRate 1
-#define kEnemyMaxCount 10
+#define kEnemyMinSpeed 1.0
+#define kEnemyMaxSpeed 2.0
 
 #endif

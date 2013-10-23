@@ -55,7 +55,7 @@ void Player::checkMoveControls()
 void Player::checkActionControls()
 {
 	if(osl_pad.pressed.square)
-		this->fire(1, 0);
+		this->fire(kPlayerBulletSpeed, 0);
 }
 
 void Player::checkBounds()

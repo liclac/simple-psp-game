@@ -113,7 +113,7 @@ void App::tick()
 	{
 		Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"));
 		enemy->move(SCREEN_WIDTH + enemy->width(), uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT - enemy->height()));
-		enemy->putInMotion(-uRandomFloatBetween(&mt_ctx, 0.1, 0.5), 0);
+		enemy->putInMotion(-uRandomFloatBetween(&mt_ctx, kEnemyMinSpeed, kEnemyMaxSpeed), 0);
 		enemies.push_back(enemy);
 	}
 }
