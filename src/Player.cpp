@@ -14,11 +14,28 @@ Player::~Player()
 
 void Player::tick()
 {
-	Thing::tick();
-	
 	this->checkMoveControls();
 	this->checkBounds();
 	this->checkActionControls();
+	
+	// Call this /afterwards/, otherwise we get a frame where a newly
+	// fired bullet won't get collission checked properly!
+	// (nobody cares, but still...)
+	Thing::tick();
+	
+	for(std::deque<Bullet>::iterator it = this->ownedBullets.begin(); it != this->ownedBullets.end(); it++)
+	{
+		for(std::deque<Enemy *>::iterator eit = this->app->enemies.begin(); eit != this->app->enemies.end(); eit++)
+		{
+			Enemy *enemy = *eit;
+			Bullet &bullet = *it;
+			if(enemy->collidesWith(bullet))
+			{
+				enemy->hp -= 1;
+				bullet.usedUp = true;
+			}
+		}
+	}
 }
 
 void Player::checkMoveControls()
@@ -43,10 +60,10 @@ void Player::checkActionControls()
 
 void Player::checkBounds()
 {
-	int xMin = (width()/2);
-	int xMax = (SCREEN_WIDTH - width()/2);
-	int yMin = (height()/2);
-	int yMax = (SCREEN_HEIGHT - height()/2);
+	int xMin = 0;
+	int xMax = SCREEN_WIDTH - width();
+	int yMin = 0;
+	int yMax = SCREEN_HEIGHT - height();
 	
 	if(this->x < xMin) this->x = xMin;
 	else if(this->x > xMax) this->x = xMax;

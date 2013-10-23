@@ -7,6 +7,7 @@
 #include <map>
 #include "common.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class App
 {
@@ -20,6 +21,10 @@ public:
 	void unloadImage(std::string filename);
 	void unloadAllImages();
 	
+	Player *player;
+	std::deque<Enemy *> enemies;
+	OSL_IMAGE *bgImage;
+	
 protected:
 	void parseArgs(int argc, const char **argv);
 	void initOSL();
@@ -29,10 +34,6 @@ protected:
 	
 protected:
 	std::string appDir;
-	
-	Player *player;
-	std::deque<Thing *> enemies;
-	OSL_IMAGE *bgImage;
 	
 	std::map<std::string, OSL_IMAGE*> images;
 	

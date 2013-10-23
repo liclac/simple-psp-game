@@ -3,7 +3,9 @@
 #include <iostream>
 
 Bullet::Bullet(Thing *parent):
-	parent(parent)
+	parent(parent),
+	x(0), y(0), vx(0), vy(0),
+	usedUp(false)
 {
 	
 }
@@ -22,11 +24,8 @@ void Bullet::tick()
 void Bullet::draw()
 {
 	oslDrawFillRect(
-		this->x - width()/2, this->y - height()/2,
-		this->x + width()/2, this->y + height()/2,
+		this->x, this->y,
+		this->x + width(), this->y + height(),
 		RGB(255,0,0)
 	);
 }
-
-int Bullet::width() { return 10; }
-int Bullet::height() { return 2; }

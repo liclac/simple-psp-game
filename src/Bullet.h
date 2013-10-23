@@ -17,8 +17,10 @@ public:
 	float x, y;
 	float vx, vy;
 	
-	int width();
-	int height();
+	bool usedUp;
+	
+	inline int width() const { return 10; };
+	inline int height() const { return 2; };
 	//OSL_IMAGE *image;
 };
 

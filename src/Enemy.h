@@ -8,6 +8,8 @@ class Enemy : public Thing
 public:
 	Enemy(App *app, OSL_IMAGE *image = 0, OSL_IMAGE *bulletImage = 0);
 	virtual ~Enemy();
+	
+	int hp;
 };
 
 #endif

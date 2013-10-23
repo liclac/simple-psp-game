@@ -94,14 +94,25 @@ void App::tick()
 	
 	// Let objects update their states
 	player->tick();
-	for(std::deque<Thing*>::iterator it = enemies.begin(); it != enemies.end(); it++)
-		(*it)->tick();
+	std::deque<Enemy*>::iterator it = enemies.begin();
+	while(it != enemies.end())
+	{
+		Enemy *enemy = *it;
+		enemy->tick();
+		
+		if(enemy->hp <= 0 || enemy->x + enemy->width() < 0)
+		{
+			it = enemies.erase(it);
+			delete enemy;
+		}
+		else ++it;
+	}
 	
 	// Occasionally spawn enemies
 	if(uRandomBool(&mt_ctx, kEnemySpawnRate))
 	{
 		Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"));
-		enemy->move(SCREEN_WIDTH + enemy->width()/2, uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT));
+		enemy->move(SCREEN_WIDTH + enemy->width(), uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT - enemy->height()));
 		enemy->putInMotion(-uRandomFloatBetween(&mt_ctx, 0.1, 0.5), 0);
 		enemies.push_back(enemy);
 	}
@@ -119,7 +130,7 @@ void App::draw()
 	oslDrawImage(bgImage);
 	
 	// Let objects draw themselves
-	for(std::deque<Thing*>::iterator it = enemies.begin(); it != enemies.end(); it++)
+	for(std::deque<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); it++)
 		(*it)->draw();
 	player->draw();
 	

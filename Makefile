@@ -4,7 +4,7 @@ OBJS   = src/main.o src/App.o \
 			src/util.o
 
 INCDIR   = lib
-CFLAGS   = -G0 -Wall -O0
+CFLAGS   = -G0 -Wall -O2
 CXXFLAGS = $(CFLAGS) -fno-rtti
 ASFLAGS  = $(CFLAGS)
 

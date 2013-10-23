@@ -25,6 +25,9 @@ public:
 	void resize(int width, int height);
 	void resizeBy(int dwidth, int dheight);
 	
+	bool collidesWith(Thing &thing);
+	bool collidesWith(Bullet &bullet);
+	
 	float x, y;
 	float vx, vy;
 	
@@ -35,6 +38,8 @@ public:
 	OSL_COLOR color;
 	
 protected:
+	bool _collissionCheck(const float& aMinX, const float& aMinY, const float& aMaxX, const float& aMaxY, const float& bMinX, const float& bMinY, const float& bMaxX, const float& bMaxY) const;
+	
 	std::deque<Bullet> ownedBullets;
 	
 	int _width, _height;
