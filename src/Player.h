@@ -4,6 +4,12 @@
 #include "Thing.h"
 #include <oslib/oslib.h>
 
+typedef enum {
+	WeaponTypeStandard,
+	WeaponTypeTriple,
+	_WeaponTypeMax
+} WeaponType;
+
 class Player : public Thing
 {
 public:
@@ -11,6 +17,8 @@ public:
 	virtual ~Player();
 	
 	virtual void tick();
+	
+	int weaponType;
 	
 protected:
 	void checkMoveControls();

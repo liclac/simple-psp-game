@@ -35,11 +35,11 @@ void Thing::draw()
 	this->drawSelf();
 }
 
-void Thing::fire(float vx, float vy, OSL_IMAGE *imageOverride)
+void Thing::fire(float vx, float vy, float xoff, float yoff)
 {
 	Bullet bullet(this);
-	bullet.x = this->x + this->width()/2;
-	bullet.y = this->y + this->height()/2;
+	bullet.x = this->x + (xoff == -1 ? this->width()/2 : xoff);
+	bullet.y = this->y + (yoff == -1 ? this->height()/2 : yoff);
 	bullet.vx = vx;
 	bullet.vy = vy;
 	//bullet.image = (imageOverride ? imageOverride : this->bulletImage);

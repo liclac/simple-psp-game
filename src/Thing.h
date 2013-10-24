@@ -15,7 +15,7 @@ public:
 	
 	virtual void tick();
 	virtual void draw();
-	virtual void fire(float vx, float vy, OSL_IMAGE *imageOverride = 0);
+	virtual void fire(float vx, float vy = 0, float xoff = -1, float yoff = -1);
 	
 	void move(float x, float y);
 	void moveBy(float dx, float dy);

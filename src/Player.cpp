@@ -2,7 +2,8 @@
 #include "App.h"
 
 Player::Player(App *app, OSL_IMAGE *image, OSL_IMAGE *bulletImage):
-	Thing(app, image, bulletImage)
+	Thing(app, image, bulletImage),
+	weaponType(WeaponTypeStandard)
 {
 	
 }
@@ -47,6 +48,13 @@ void Player::checkMoveControls()
 	if(osl_pad.held.L || osl_pad.held.R)
 		speed = speed/2;
 	
+	if(osl_pad.pressed.triangle)
+	{
+		this->weaponType++;
+		if(weaponType >= _WeaponTypeMax)
+			weaponType = 0;
+	}
+	
 	if(osl_pad.held.up) this->y -= speed;
 	if(osl_pad.held.down) this->y += speed;
 	if(osl_pad.held.left) this->x -= speed;
@@ -56,7 +64,19 @@ void Player::checkMoveControls()
 void Player::checkActionControls()
 {
 	if(osl_pad.pressed.square)
-		this->fire(kPlayerBulletSpeed, 0);
+	{
+		switch(this->weaponType)
+		{
+			case WeaponTypeStandard:
+				this->fire(kPlayerBulletSpeed, 0);
+				break;
+			case WeaponTypeTriple:
+				this->fire(kPlayerBulletSpeed, 0, 0, 0);
+				this->fire(kPlayerBulletSpeed, 0, this->width(), this->height()/2);
+				this->fire(kPlayerBulletSpeed, 0, 0, this->height());
+				break;
+		}
+	}
 }
 
 void Player::checkBounds()
