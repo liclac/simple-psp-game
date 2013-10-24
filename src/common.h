@@ -11,8 +11,8 @@
 /*
  * -- Hardware Info
  */
-#define SCREEN_HEIGHT 272
 #define SCREEN_WIDTH 480
+#define SCREEN_HEIGHT 272
 
 /*
  * -- Font Paths
