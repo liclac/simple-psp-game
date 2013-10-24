@@ -9,6 +9,12 @@
 #include "Player.h"
 #include "Enemy.h"
 
+typedef enum {
+	AppStatePlaying,
+	AppStatePaused,
+	AppStateGameOver
+} AppState;
+
 class App
 {
 public:
@@ -24,6 +30,9 @@ public:
 	Player *player;
 	std::deque<Enemy *> enemies;
 	OSL_IMAGE *bgImage;
+	OSL_FONT *bigFont, *smallFont;
+	
+	AppState state;
 	
 protected:
 	void parseArgs(int argc, const char **argv);

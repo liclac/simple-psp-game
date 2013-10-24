@@ -17,6 +17,9 @@ App::App(int argc, const char **argv)
 	bgImage = this->loadImagePNG("img/bg.png");
 	bgImage->x = 0;
 	bgImage->y = 0;
+	
+	bigFont = oslLoadFontFile(FONT_PATH_BIG_SANS);
+	smallFont = oslLoadFontFile(FONT_PATH_SMALL_SANS);
 }
 
 App::~App()
@@ -92,29 +95,46 @@ void App::tick()
 	// Check the controller for new inputs; this updates osl_pad
 	oslReadKeys();
 	
-	// Let objects update their states
-	player->tick();
-	std::deque<Enemy*>::iterator it = enemies.begin();
-	while(it != enemies.end())
+	if(this->state == AppStatePlaying)
 	{
-		Enemy *enemy = *it;
-		enemy->tick();
-		
-		if(enemy->hp <= 0 || enemy->x + enemy->width() < 0)
+		if(osl_pad.pressed.start)
+			this->state = AppStatePaused;
+		else
 		{
-			it = enemies.erase(it);
-			delete enemy;
+			// Let objects update their states
+			player->tick();
+			std::deque<Enemy*>::iterator it = enemies.begin();
+			while(it != enemies.end())
+			{
+				Enemy *enemy = *it;
+				enemy->tick();
+				
+				if(enemy->hp <= 0 || enemy->x + enemy->width() < 0)
+				{
+					it = enemies.erase(it);
+					delete enemy;
+				}
+				else ++it;
+			}
+			
+			// Occasionally spawn enemies
+			if(uRandomBool(&mt_ctx, kEnemySpawnRate))
+			{
+				Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"));
+				enemy->move(SCREEN_WIDTH + enemy->width(), uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT - enemy->height()));
+				enemy->putInMotion(-uRandomFloatBetween(&mt_ctx, kEnemyMinSpeed, kEnemyMaxSpeed), 0);
+				enemies.push_back(enemy);
+			}
 		}
-		else ++it;
 	}
-	
-	// Occasionally spawn enemies
-	if(uRandomBool(&mt_ctx, kEnemySpawnRate))
+	else if(this->state == AppStatePaused)
 	{
-		Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"));
-		enemy->move(SCREEN_WIDTH + enemy->width(), uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT - enemy->height()));
-		enemy->putInMotion(-uRandomFloatBetween(&mt_ctx, kEnemyMinSpeed, kEnemyMaxSpeed), 0);
-		enemies.push_back(enemy);
+		if(osl_pad.pressed.start)
+			this->state = AppStatePlaying;
+	}
+	else if(this->state == AppStateGameOver)
+	{
+		
 	}
 }
 
@@ -133,6 +153,23 @@ void App::draw()
 	for(std::deque<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); it++)
 		(*it)->draw();
 	player->draw();
+	
+	// Draw overlays for certain states
+	if(state == AppStatePaused)
+	{
+		const char *msg1 = "PAUSED";
+		const char *msg2 = "START = Resume";
+		
+		oslSetFont(this->bigFont);
+		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg1))/2, SCREEN_HEIGHT/2 - this->bigFont->charHeight, msg1);
+		
+		oslSetFont(this->smallFont);
+		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg2))/2, (SCREEN_HEIGHT/2) + 5, msg2);
+	}
+	else if(state == AppStateGameOver)
+	{
+		
+	}
 	
 	// Release stuff grabbed in oslStartDrawing()
 	oslEndDrawing();
