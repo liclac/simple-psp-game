@@ -5,7 +5,7 @@ Player::Player(App *app, OSL_IMAGE *image, OSL_IMAGE *bulletImage):
 	Thing(app, image, bulletImage),
 	weaponType(WeaponTypeStandard)
 {
-	
+	this->hp = 3;
 }
 
 Player::~Player()

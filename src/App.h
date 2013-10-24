@@ -23,13 +23,14 @@ public:
 	
 	void run();
 	
-	OSL_IMAGE* loadImagePNG(std::string filename, int flags = OSL_IN_VRAM | OSL_SWIZZLED, int format = OSL_PF_5551);
+	OSL_IMAGE* loadImagePNG(std::string filename, int format = OSL_PF_5551, int flags = OSL_IN_VRAM | OSL_SWIZZLED);
 	void unloadImage(std::string filename);
 	void unloadAllImages();
 	
 	Player *player;
 	std::deque<Enemy *> enemies;
-	OSL_IMAGE *bgImage;
+	
+	OSL_IMAGE *bgImage, *hpImage;
 	OSL_FONT *bigFont, *smallFont;
 	
 	AppState state;

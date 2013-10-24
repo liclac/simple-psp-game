@@ -20,6 +20,8 @@ App::App(int argc, const char **argv):
 	bgImage->x = 0;
 	bgImage->y = 0;
 	
+	hpImage = this->loadImagePNG("img/heart.png", OSL_PF_4444);
+	
 	bigFont = oslLoadFontFile(FONT_PATH_BIG_SANS);
 	smallFont = oslLoadFontFile(FONT_PATH_SMALL_SANS);
 }
@@ -191,9 +193,19 @@ void App::drawHUD()
 		std::string scoreString = scoreStream.str();
 		oslDrawString(SCREEN_WIDTH - oslGetStringWidth(scoreString.c_str()) - 10, 10, scoreString.c_str());
 	}
+	
+	// Lives
+	{
+		for(int i = 0; i < player->hp; i++)
+		{
+			int x = 5 + (15 + 10)*i;
+			int y = 0;
+			oslDrawImageXY(this->hpImage, x, y);
+		}
+	}
 }
 
-OSL_IMAGE* App::loadImagePNG(std::string filename, int flags, int format)
+OSL_IMAGE* App::loadImagePNG(std::string filename, int format, int flags)
 {
 	std::map<std::string, OSL_IMAGE*>::iterator it = images.find(filename);
 	if(it == images.end())
