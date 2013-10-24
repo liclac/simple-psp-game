@@ -1,17 +1,19 @@
 #include "App.h"
 #include <iostream>
+#include <sstream>
 #include "util.h"
 #include "Enemy.h"
 
-App::App(int argc, const char **argv)
+App::App(int argc, const char **argv):
+	score(0)
 {
 	this->parseArgs(argc, argv);
 	this->initOSL();
 	
-	sceKernelUtilsMt19937Init(&mt_ctx, time(NULL));
+	uRandomInit(time(NULL));
 	srand(time(NULL)); // In case I need it... I sure hope not.
 	
-	player = new Player(this, this->loadImagePNG("img/ship.png"));
+	player = new Player(this, this->loadImagePNG("img/ship.png"), this->loadImagePNG("img/beam.png"));
 	player->move(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	
 	bgImage = this->loadImagePNG("img/bg.png");
@@ -109,7 +111,7 @@ void App::tick()
 				Enemy *enemy = *it;
 				enemy->tick();
 				
-				if(enemy->hp <= 0 || enemy->x + enemy->width() < 0)
+				if(enemy->x + enemy->width() < 0)
 				{
 					it = enemies.erase(it);
 					delete enemy;
@@ -118,11 +120,11 @@ void App::tick()
 			}
 			
 			// Occasionally spawn enemies
-			if(uRandomBool(&mt_ctx, kEnemySpawnRate))
+			if(uRandomBool(kEnemySpawnRate))
 			{
-				Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"));
-				enemy->move(SCREEN_WIDTH + enemy->width(), uRandomUIntBetween(&mt_ctx, 0, SCREEN_HEIGHT - enemy->height()));
-				enemy->putInMotion(-uRandomFloatBetween(&mt_ctx, kEnemyMinSpeed, kEnemyMaxSpeed), 0);
+				Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"), this->loadImagePNG("img/rocket.png"));
+				enemy->move(SCREEN_WIDTH + enemy->width(), uRandomUIntBetween(0, SCREEN_HEIGHT - enemy->height()));
+				enemy->putInMotion(-uRandomFloatBetween(kEnemyMinSpeed, kEnemyMaxSpeed), 0);
 				enemies.push_back(enemy);
 			}
 		}
@@ -154,6 +156,9 @@ void App::draw()
 		(*it)->draw();
 	player->draw();
 	
+	// Draw HUD
+	this->drawHUD();
+	
 	// Draw overlays for certain states
 	if(state == AppStatePaused)
 	{
@@ -171,8 +176,21 @@ void App::draw()
 		
 	}
 	
-	// Release stuff grabbed in oslStartDrawing()
+	// Release resources grabbed in oslStartDrawing()
 	oslEndDrawing();
+}
+
+void App::drawHUD()
+{
+	oslSetFont(this->bigFont);
+	
+	// Score
+	{
+		std::stringstream scoreStream;
+		scoreStream << score;
+		std::string scoreString = scoreStream.str();
+		oslDrawString(SCREEN_WIDTH - oslGetStringWidth(scoreString.c_str()) - 10, 10, scoreString.c_str());
+	}
 }
 
 OSL_IMAGE* App::loadImagePNG(std::string filename, int flags, int format)

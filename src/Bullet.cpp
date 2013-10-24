@@ -23,9 +23,20 @@ void Bullet::tick()
 
 void Bullet::draw()
 {
-	oslDrawFillRect(
+	/*oslDrawFillRect(
 		this->x, this->y,
 		this->x + width(), this->y + height(),
 		RGB(255,0,0)
-	);
+	);*/
+	oslDrawImageXY(this->parent->bulletImage, this->x, this->y);
+}
+
+int Bullet::width()
+{
+	return this->parent->bulletImage->sizeX;
+}
+
+int Bullet::height()
+{
+	return this->parent->bulletImage->sizeY;
 }

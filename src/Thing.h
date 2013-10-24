@@ -30,6 +30,7 @@ public:
 	
 	float x, y;
 	float vx, vy;
+	int hp;
 	
 	inline int width() { return (this->image ? this->image->sizeX : this->_width); };
 	inline int height() { return (this->image ? this->image->sizeY : this->_height); };
@@ -39,6 +40,9 @@ public:
 	
 protected:
 	bool _collissionCheck(const float& aMinX, const float& aMinY, const float& aMaxX, const float& aMaxY, const float& bMinX, const float& bMinY, const float& bMaxX, const float& bMaxY) const;
+	
+	virtual void drawBullets();
+	virtual void drawSelf();
 	
 	std::deque<Bullet> ownedBullets;
 	

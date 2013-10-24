@@ -19,8 +19,10 @@ public:
 	
 	bool usedUp;
 	
-	inline int width() const { return 10; };
-	inline int height() const { return 2; };
+	//inline int width() const { return 10; };
+	//inline int height() const { return 2; };
+	int width();
+	int height();
 	//OSL_IMAGE *image;
 };
 

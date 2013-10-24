@@ -33,6 +33,7 @@ void Player::tick()
 			{
 				enemy->hp -= 1;
 				bullet.usedUp = true;
+				this->app->score += 1;
 			}
 		}
 	}

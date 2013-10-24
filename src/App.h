@@ -34,19 +34,20 @@ public:
 	
 	AppState state;
 	
+	int score;
+	
 protected:
 	void parseArgs(int argc, const char **argv);
 	void initOSL();
 	
 	void tick();
 	void draw();
+	void drawHUD();
 	
 protected:
 	std::string appDir;
 	
 	std::map<std::string, OSL_IMAGE*> images;
-	
-	SceKernelUtilsMt19937Context mt_ctx;
 };
 
 #endif
