@@ -110,12 +110,6 @@ void Player::checkActionControls()
 				break;
 		}
 	}
-	
-	if(osl_pad.pressed.select)
-	{
-		this->app->unloadAllImages();
-		this->app->newGame();
-	}
 }
 
 void Player::checkBounds()

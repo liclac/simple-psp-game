@@ -23,6 +23,7 @@ public:
 	virtual ~App();
 	
 	void newGame();
+	void reset();
 	
 	void run();
 	
@@ -43,6 +44,8 @@ public:
 protected:
 	void parseArgs(int argc, const char **argv);
 	void initOSL();
+	void loadResources();
+	void loadFonts();
 	
 	void tick();
 	void draw();

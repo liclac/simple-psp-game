@@ -8,21 +8,14 @@ App::App(int argc, const char **argv):
 	score(0),
 	player(0)
 {
-	this->parseArgs(argc, argv);
-	this->initOSL();
-	
 	uRandomInit(time(NULL));
 	srand(time(NULL)); // In case I need it... I sure hope not.
 	
-	bgImage = this->loadImagePNG("img/bg.png");
-	bgImage->x = 0;
-	bgImage->y = 0;
+	this->parseArgs(argc, argv);
+	this->initOSL();
 	
-	hpImage = this->loadImagePNG("img/heart.png", OSL_PF_5551);
-	
-	bigFont = oslLoadFontFile(FONT_PATH_BIG_SANS);
-	smallFont = oslLoadFontFile(FONT_PATH_SMALL_SANS);
-	
+	this->loadFonts();
+	this->loadResources();
 	this->newGame();
 }
 
@@ -73,14 +66,30 @@ void App::initOSL()
 	oslSetMaxFrameskip(4);
 }
 
+void App::loadResources()
+{
+	bgImage = this->loadImagePNG("img/bg.png");
+	bgImage->x = 0;
+	bgImage->y = 0;
+	
+	hpImage = this->loadImagePNG("img/heart.png", OSL_PF_5551);
+}
+
+void App::loadFonts()
+{
+	bigFont = oslLoadFontFile(FONT_PATH_BIG_SANS);
+	smallFont = oslLoadFontFile(FONT_PATH_SMALL_SANS);
+}
+
 void App::newGame()
 {
-	if(player)
-		delete player;
-	
+	if(player != 0) delete player;
 	player = new Player(this, this->loadImagePNG("img/ship.png"), this->loadImagePNG("img/beam.png"));
 	player->move((SCREEN_WIDTH - player->width())/2, (SCREEN_HEIGHT - player->height())/2);
 	
+	this->enemies.clear();
+	
+	if(enemySpawner != 0) delete enemySpawner;
 	enemySpawner = new EnemySpawner(this);
 	enemySpawner->image = this->loadImagePNG("img/enemy1.png");
 	enemySpawner->bulletImage = this->loadImagePNG("img/rocket.png");
@@ -89,8 +98,6 @@ void App::newGame()
 	enemySpawner->minSpeed = kEnemyMinSpeed;
 	enemySpawner->maxSpeed = kEnemyMaxSpeed;
 	enemySpawner->bulletSpeed = kEnemyBulletSpeed;
-	
-	this->enemies.clear();
 	
 	score = 0;
 	state = AppStatePlaying;
@@ -117,6 +124,17 @@ void App::run()
 	}
 }
 
+void App::reset()
+{
+	std::cout << "Resetting..." << std::endl;
+	
+	this->unloadAllImages();
+	this->loadResources();
+	this->newGame();
+	
+	std::cout << "Reset Finished!" << std::endl;
+}
+
 void App::tick()
 {
 	// Check the controller for new inputs; this updates osl_pad
@@ -128,6 +146,13 @@ void App::tick()
 			this->state = AppStatePaused;
 		else
 		{
+			if(osl_pad.pressed.select)
+			{
+				this->reset();
+				this->tick();
+				return;
+			}
+			
 			// Let objects update their states
 			player->tick();
 			std::deque<Enemy>::iterator it = enemies.begin();
