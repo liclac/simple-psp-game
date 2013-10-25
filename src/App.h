@@ -8,6 +8,7 @@
 #include "common.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "EnemySpawner.h"
 
 typedef enum {
 	AppStatePlaying,
@@ -31,6 +32,7 @@ public:
 	
 	int score;
 	Player *player;
+	EnemySpawner *enemySpawner;
 	std::deque<Enemy *> enemies;
 	
 	OSL_IMAGE *bgImage, *hpImage;

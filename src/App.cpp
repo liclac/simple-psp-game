@@ -23,6 +23,15 @@ App::App(int argc, const char **argv):
 	bigFont = oslLoadFontFile(FONT_PATH_BIG_SANS);
 	smallFont = oslLoadFontFile(FONT_PATH_SMALL_SANS);
 	
+	enemySpawner = new EnemySpawner(this);
+	enemySpawner->image = this->loadImagePNG("img/enemy1.png");
+	enemySpawner->bulletImage = this->loadImagePNG("img/rocket.png");
+	enemySpawner->spawnRate = kEnemySpawnRate;
+	enemySpawner->fireRate = kEnemyFireRate;
+	enemySpawner->minSpeed = kEnemyMinSpeed;
+	enemySpawner->maxSpeed = kEnemyMaxSpeed;
+	enemySpawner->bulletSpeed = kEnemyBulletSpeed;
+	
 	this->newGame();
 }
 
@@ -133,13 +142,7 @@ void App::tick()
 			}
 			
 			// Occasionally spawn enemies
-			if(uRandomBool(kEnemySpawnRate))
-			{
-				Enemy *enemy = new Enemy(this, this->loadImagePNG("img/enemy1.png"), this->loadImagePNG("img/rocket.png"));
-				enemy->move(SCREEN_WIDTH + enemy->width(), uRandomUIntBetween(0, SCREEN_HEIGHT - enemy->height()));
-				enemy->putInMotion(-uRandomFloatBetween(kEnemyMinSpeed, kEnemyMaxSpeed), 0);
-				enemies.push_back(enemy);
-			}
+			enemySpawner->tick();
 		}
 	}
 	else if(this->state == AppStatePaused)
