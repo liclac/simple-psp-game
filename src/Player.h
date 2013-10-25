@@ -17,13 +17,17 @@ public:
 	virtual ~Player();
 	
 	virtual void tick();
+	virtual void drawSelf();
 	
 	int weaponType;
+	int invincibilityCountdown;
 	
 protected:
 	void checkMoveControls();
 	void checkActionControls();
 	void checkBounds();
+	
+	void die();
 };
 
 #endif

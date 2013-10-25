@@ -38,13 +38,13 @@ public:
 	OSL_IMAGE *image, *bulletImage;
 	OSL_COLOR color;
 	
+	std::deque<Bullet> ownedBullets;
+	
 protected:
 	bool _collissionCheck(const float& aMinX, const float& aMinY, const float& aMaxX, const float& aMaxY, const float& bMinX, const float& bMinY, const float& bMaxX, const float& bMaxY) const;
 	
 	virtual void drawBullets();
 	virtual void drawSelf();
-	
-	std::deque<Bullet> ownedBullets;
 	
 	int _width, _height;
 	

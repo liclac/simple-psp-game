@@ -3,7 +3,8 @@
 
 Player::Player(App *app, OSL_IMAGE *image, OSL_IMAGE *bulletImage):
 	Thing(app, image, bulletImage),
-	weaponType(WeaponTypeStandard)
+	weaponType(WeaponTypeStandard),
+	invincibilityCountdown(0)
 {
 	this->hp = 3;
 }
@@ -24,12 +25,14 @@ void Player::tick()
 	// (nobody cares, but still...)
 	Thing::tick();
 	
+	// Collission check bullets
 	for(std::deque<Bullet>::iterator it = this->ownedBullets.begin(); it != this->ownedBullets.end(); it++)
 	{
+		Bullet &bullet = *it;
+		
 		for(std::deque<Enemy *>::iterator eit = this->app->enemies.begin(); eit != this->app->enemies.end(); eit++)
 		{
 			Enemy *enemy = *eit;
-			Bullet &bullet = *it;
 			if(enemy->collidesWith(bullet))
 			{
 				enemy->hp -= 1;
@@ -38,6 +41,36 @@ void Player::tick()
 			}
 		}
 	}
+	
+	// If we're not currently invincible, collission check the player too
+	if(invincibilityCountdown <= 0)
+	{
+		for(std::deque<Enemy *>::iterator it = this->app->enemies.begin(); it != this->app->enemies.end(); it++)
+		{
+			Enemy &enemy = **it;
+			if(this->collidesWith(enemy))
+				this->die();
+			
+			for(std::deque<Bullet>::iterator bit = enemy.ownedBullets.begin(); bit != enemy.ownedBullets.end(); bit++)
+			{
+				Bullet &bullet = *bit;
+				if(this->collidesWith(bullet))
+					this->die();
+			}
+		}
+	}
+	else
+	{
+		this->invincibilityCountdown--;
+	}
+}
+
+void Player::drawSelf()
+{
+	if(invincibilityCountdown > 0)
+		oslSetAlpha(OSL_FX_ALPHA, 128);
+	
+	Thing::drawSelf();
 }
 
 void Player::checkMoveControls()
@@ -91,4 +124,19 @@ void Player::checkBounds()
 	
 	if(this->y < yMin) this->y = yMin;
 	else if(this->y > yMax) this->y = yMax;
+}
+
+void Player::die()
+{
+	this->hp--;
+	if(this->hp <= 0)
+	{
+		this->app->state = AppStateGameOver;
+	}
+	else
+	{
+		this->invincibilityCountdown = kPlayerDeathInvFrames;
+		this->x = 0;
+		this->y = (SCREEN_HEIGHT - this->height())/2;
+	}
 }

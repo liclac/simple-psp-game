@@ -42,7 +42,8 @@
  */
 #define kPlayerSpeed 4
 #define kPlayerSize 5
-#define kPlayerBulletSpeed 2
+#define kPlayerBulletSpeed 5
+#define kPlayerDeathInvFrames 60
 
 #define kEnemySpawnRate 1
 #define kEnemyFireRate 1

@@ -57,6 +57,9 @@ void Thing::resizeBy(int dwidth, int dheight) { this->_width += dwidth; this->_h
 
 bool Thing::collidesWith(Thing &thing)
 {
+	if(this->hp == 0 || thing.hp == 0)
+		return false;
+	
 	return this->_collissionCheck(
 		this->x, this->y, this->x + this->width(), this->y + this->height(),
 		thing.x, thing.y, thing.x + thing.width(), thing.y + thing.height()
@@ -65,6 +68,9 @@ bool Thing::collidesWith(Thing &thing)
 
 bool Thing::collidesWith(Bullet &bullet)
 {
+	if(this->hp == 0 || bullet.parent->hp == 0)
+		return false;
+	
 	return this->_collissionCheck(
 		this->x, this->y, this->x + this->width(), this->y + this->height(),
 		bullet.x, bullet.y, bullet.x + bullet.width(), bullet.y + bullet.height()
@@ -74,9 +80,6 @@ bool Thing::collidesWith(Bullet &bullet)
 bool Thing::_collissionCheck(const float& aMinX, const float& aMinY, const float& aMaxX, const float& aMaxY,
 						const float& bMinX, const float& bMinY, const float& bMaxX, const float& bMaxY) const
 {
-	// If the thing isn't alive, it definitely doesn't collide with anything
-	if(hp <= 0) return false;
-	
 	// Use the AABB (Aligned Axis Bounding Box) algorithm to collission check
 	// Basically, if we can draw a line between the two bounding boxes, that
 	// means they logically can't be overlapping.

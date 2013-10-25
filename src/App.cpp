@@ -5,16 +5,14 @@
 #include "Enemy.h"
 
 App::App(int argc, const char **argv):
-	score(0)
+	score(0),
+	player(0)
 {
 	this->parseArgs(argc, argv);
 	this->initOSL();
 	
 	uRandomInit(time(NULL));
 	srand(time(NULL)); // In case I need it... I sure hope not.
-	
-	player = new Player(this, this->loadImagePNG("img/ship.png"), this->loadImagePNG("img/beam.png"));
-	player->move(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	
 	bgImage = this->loadImagePNG("img/bg.png");
 	bgImage->x = 0;
@@ -24,6 +22,8 @@ App::App(int argc, const char **argv):
 	
 	bigFont = oslLoadFontFile(FONT_PATH_BIG_SANS);
 	smallFont = oslLoadFontFile(FONT_PATH_SMALL_SANS);
+	
+	this->newGame();
 }
 
 App::~App()
@@ -71,6 +71,17 @@ void App::initOSL()
 	// -- Synchronization
 	oslSetFrameskip(1);
 	oslSetMaxFrameskip(4);
+}
+
+void App::newGame()
+{
+	if(player)
+		delete player;
+	
+	player = new Player(this, this->loadImagePNG("img/ship.png"), this->loadImagePNG("img/beam.png"));
+	player->move((SCREEN_WIDTH - player->width())/2, (SCREEN_HEIGHT - player->height())/2);
+	
+	state = AppStatePlaying;
 }
 
 void App::run()
@@ -138,7 +149,8 @@ void App::tick()
 	}
 	else if(this->state == AppStateGameOver)
 	{
-		
+		if(osl_pad.pressed.start)
+			this->newGame();
 	}
 }
 
@@ -168,14 +180,21 @@ void App::draw()
 		const char *msg2 = "START = Resume";
 		
 		oslSetFont(this->bigFont);
-		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg1))/2, SCREEN_HEIGHT/2 - this->bigFont->charHeight, msg1);
+		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg1))/2, SCREEN_HEIGHT/2 - this->bigFont->charHeight - 2, msg1);
 		
 		oslSetFont(this->smallFont);
-		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg2))/2, (SCREEN_HEIGHT/2) + 5, msg2);
+		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg2))/2, (SCREEN_HEIGHT/2) + 2, msg2);
 	}
 	else if(state == AppStateGameOver)
 	{
+		const char *msg1 = "Game Over";
+		const char *msg2 = "Press START to try again";
 		
+		oslSetFont(this->bigFont);
+		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg1))/2, SCREEN_HEIGHT/2 - this->bigFont->charHeight - 2, msg1);
+		
+		oslSetFont(this->smallFont);
+		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg2))/2, (SCREEN_HEIGHT/2) + 2, msg2);
 	}
 	
 	// Release resources grabbed in oslStartDrawing()

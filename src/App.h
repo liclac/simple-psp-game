@@ -21,12 +21,15 @@ public:
 	App(int argc, const char **argv);
 	virtual ~App();
 	
+	void newGame();
+	
 	void run();
 	
 	OSL_IMAGE* loadImagePNG(std::string filename, int format = OSL_PF_5551, int flags = OSL_IN_VRAM | OSL_SWIZZLED);
 	void unloadImage(std::string filename);
 	void unloadAllImages();
 	
+	int score;
 	Player *player;
 	std::deque<Enemy *> enemies;
 	
@@ -34,8 +37,6 @@ public:
 	OSL_FONT *bigFont, *smallFont;
 	
 	AppState state;
-	
-	int score;
 	
 protected:
 	void parseArgs(int argc, const char **argv);
