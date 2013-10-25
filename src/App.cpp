@@ -90,6 +90,11 @@ void App::newGame()
 	player = new Player(this, this->loadImagePNG("img/ship.png"), this->loadImagePNG("img/beam.png"));
 	player->move((SCREEN_WIDTH - player->width())/2, (SCREEN_HEIGHT - player->height())/2);
 	
+	for(std::deque<Enemy*>::iterator it = this->enemies.begin(); it != this->enemies.end(); it++)
+		delete *it;
+	this->enemies.clear();
+	
+	score = 0;
 	state = AppStatePlaying;
 }
 
