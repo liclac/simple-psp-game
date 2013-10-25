@@ -154,6 +154,8 @@ void App::tick()
 	{
 		if(osl_pad.pressed.start)
 			this->state = AppStatePlaying;
+		else if(osl_pad.pressed.select)
+			this->newGame();
 	}
 	else if(this->state == AppStateGameOver)
 	{
@@ -186,12 +188,14 @@ void App::draw()
 	{
 		const char *msg1 = "PAUSED";
 		const char *msg2 = "START = Resume";
+		const char *msg3 = "SELECT = Restart";
 		
 		oslSetFont(this->bigFont);
 		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg1))/2, SCREEN_HEIGHT/2 - this->bigFont->charHeight - 2, msg1);
 		
 		oslSetFont(this->smallFont);
 		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg2))/2, (SCREEN_HEIGHT/2) + 2, msg2);
+		oslDrawString((SCREEN_WIDTH - oslGetStringWidth(msg3))/2, (SCREEN_HEIGHT/2) + 2 + osl_curFont->charHeight + 5, msg3);
 	}
 	else if(state == AppStateGameOver)
 	{
