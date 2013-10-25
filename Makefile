@@ -4,7 +4,7 @@ OBJS   = src/main.o src/App.o src/EnemySpawner.o \
 			src/util.o
 
 INCDIR   = lib
-CFLAGS   = -G0 -Wall -O0 -g
+CFLAGS   = -G0 -Wall -O2 -g
 CXXFLAGS = $(CFLAGS) -fno-rtti
 ASFLAGS  = $(CFLAGS)
 
