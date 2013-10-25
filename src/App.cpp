@@ -18,19 +18,10 @@ App::App(int argc, const char **argv):
 	bgImage->x = 0;
 	bgImage->y = 0;
 	
-	hpImage = this->loadImagePNG("img/heart.png", OSL_PF_4444);
+	hpImage = this->loadImagePNG("img/heart.png", OSL_PF_5551);
 	
 	bigFont = oslLoadFontFile(FONT_PATH_BIG_SANS);
 	smallFont = oslLoadFontFile(FONT_PATH_SMALL_SANS);
-	
-	enemySpawner = new EnemySpawner(this);
-	enemySpawner->image = this->loadImagePNG("img/enemy1.png");
-	enemySpawner->bulletImage = this->loadImagePNG("img/rocket.png");
-	enemySpawner->spawnRate = kEnemySpawnRate;
-	enemySpawner->fireRate = kEnemyFireRate;
-	enemySpawner->minSpeed = kEnemyMinSpeed;
-	enemySpawner->maxSpeed = kEnemyMaxSpeed;
-	enemySpawner->bulletSpeed = kEnemyBulletSpeed;
 	
 	this->newGame();
 }
@@ -72,7 +63,7 @@ void App::initOSL()
 	// -- Graphics
 	// Init graphics with 16bit (for now) and double buffering
 	// Might bump it up to 32bit later if it looks too bad
-	oslInitGfx(OSL_PF_5551, true);
+	oslInitGfx(OSL_PF_5650, true);
 	
 	// -- Fonts
 	oslIntraFontInit(INTRAFONT_CACHE_MED);
@@ -90,8 +81,15 @@ void App::newGame()
 	player = new Player(this, this->loadImagePNG("img/ship.png"), this->loadImagePNG("img/beam.png"));
 	player->move((SCREEN_WIDTH - player->width())/2, (SCREEN_HEIGHT - player->height())/2);
 	
-	for(std::deque<Enemy*>::iterator it = this->enemies.begin(); it != this->enemies.end(); it++)
-		delete *it;
+	enemySpawner = new EnemySpawner(this);
+	enemySpawner->image = this->loadImagePNG("img/enemy1.png");
+	enemySpawner->bulletImage = this->loadImagePNG("img/rocket.png");
+	enemySpawner->spawnRate = kEnemySpawnRate;
+	enemySpawner->fireRate = kEnemyFireRate;
+	enemySpawner->minSpeed = kEnemyMinSpeed;
+	enemySpawner->maxSpeed = kEnemyMaxSpeed;
+	enemySpawner->bulletSpeed = kEnemyBulletSpeed;
+	
 	this->enemies.clear();
 	
 	score = 0;
@@ -132,18 +130,16 @@ void App::tick()
 		{
 			// Let objects update their states
 			player->tick();
-			std::deque<Enemy*>::iterator it = enemies.begin();
+			std::deque<Enemy>::iterator it = enemies.begin();
 			while(it != enemies.end())
 			{
-				Enemy *enemy = *it;
-				enemy->tick();
+				Enemy &enemy = *it;
+				enemy.tick();
 				
-				if(enemy->x + enemy->width() < 0)
-				{
+				if(enemy.x + enemy.width() < 0)
 					it = enemies.erase(it);
-					delete enemy;
-				}
-				else ++it;
+				else
+					++it;
 			}
 			
 			// Occasionally spawn enemies
@@ -176,8 +172,8 @@ void App::draw()
 	oslDrawImage(bgImage);
 	
 	// Let objects draw themselves
-	for(std::deque<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); it++)
-		(*it)->draw();
+	for(std::deque<Enemy>::iterator it = enemies.begin(); it != enemies.end(); it++)
+		it->draw();
 	player->draw();
 	
 	// Draw HUD

@@ -33,7 +33,7 @@ public:
 	int score;
 	Player *player;
 	EnemySpawner *enemySpawner;
-	std::deque<Enemy *> enemies;
+	std::deque<Enemy> enemies;
 	
 	OSL_IMAGE *bgImage, *hpImage;
 	OSL_FONT *bigFont, *smallFont;

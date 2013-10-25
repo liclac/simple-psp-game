@@ -21,9 +21,10 @@ void Thing::tick()
 	std::deque<Bullet>::iterator it = this->ownedBullets.begin();
 	while(it != this->ownedBullets.end())
 	{
-		it->tick();
+		Bullet &bullet = *it;
+		bullet.tick();
 		
-		if(it->usedUp || it->x + it->width() < 0 || it->x - it->width() > SCREEN_WIDTH)
+		if(bullet.usedUp || bullet.x + it->width() < 0 || bullet.x - it->width() > SCREEN_WIDTH)
 			it = ownedBullets.erase(it);
 		else ++it;
 	}

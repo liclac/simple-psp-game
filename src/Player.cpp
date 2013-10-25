@@ -30,12 +30,12 @@ void Player::tick()
 	{
 		Bullet &bullet = *it;
 		
-		for(std::deque<Enemy *>::iterator eit = this->app->enemies.begin(); eit != this->app->enemies.end(); eit++)
+		for(std::deque<Enemy>::iterator eit = this->app->enemies.begin(); eit != this->app->enemies.end(); eit++)
 		{
-			Enemy *enemy = *eit;
-			if(enemy->collidesWith(bullet))
+			Enemy &enemy = *eit;
+			if(enemy.collidesWith(bullet))
 			{
-				enemy->hp -= 1;
+				enemy.hp -= 1;
 				bullet.usedUp = true;
 				this->app->score += 1;
 			}
@@ -45,9 +45,9 @@ void Player::tick()
 	// If we're not currently invincible, collission check the player too
 	if(invincibilityCountdown <= 0)
 	{
-		for(std::deque<Enemy *>::iterator it = this->app->enemies.begin(); it != this->app->enemies.end(); it++)
+		for(std::deque<Enemy>::iterator it = this->app->enemies.begin(); it != this->app->enemies.end(); it++)
 		{
-			Enemy &enemy = **it;
+			Enemy &enemy = *it;
 			if(this->collidesWith(enemy))
 				this->die();
 			
@@ -109,6 +109,12 @@ void Player::checkActionControls()
 				this->fire(kPlayerBulletSpeed, 0, 0, this->height());
 				break;
 		}
+	}
+	
+	if(osl_pad.pressed.select)
+	{
+		this->app->unloadAllImages();
+		this->app->newGame();
 	}
 }
 

@@ -22,8 +22,8 @@ void EnemySpawner::tick()
 
 void EnemySpawner::spawn()
 {
-	Enemy *enemy = new Enemy(this->app, this->image, this->bulletImage);
-	enemy->move(SCREEN_WIDTH + enemy->width(), uRandomUIntBetween(0, SCREEN_HEIGHT - enemy->height()));
-	enemy->putInMotion(-uRandomFloatBetween(this->minSpeed, this->maxSpeed), 0);
+	Enemy enemy(this->app, this->image, this->bulletImage);
+	enemy.move(SCREEN_WIDTH + enemy.width(), uRandomUIntBetween(0, SCREEN_HEIGHT - enemy.height()));
+	enemy.putInMotion(-uRandomFloatBetween(this->minSpeed, this->maxSpeed), 0);
 	this->app->enemies.push_back(enemy);
 }
