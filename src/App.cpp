@@ -72,7 +72,7 @@ void App::loadResources()
 	bgImage->x = 0;
 	bgImage->y = 0;
 	
-	hpImage = this->loadImagePNG("img/heart.png", OSL_PF_5551);
+	hpImage = this->loadImagePNG("img/heart.png", OSL_PF_4444);
 }
 
 void App::loadFonts()
