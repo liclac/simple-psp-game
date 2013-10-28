@@ -49,6 +49,8 @@
 #define kEnemyFireRate 0.01
 #define kEnemyMinSpeed 1.0
 #define kEnemyMaxSpeed 2.0
+#define kEnemySpeedupDelay (60*2)
+#define kEnemySpeedupAmount 0.001
 #define kEnemyBulletSpeed -2
 
 #define kPowerupSpawnRate 0.0001

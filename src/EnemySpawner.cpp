@@ -2,9 +2,11 @@
 #include "App.h"
 #include "common.h"
 #include "util.h"
+#include <iostream>
 
 EnemySpawner::EnemySpawner(App *app):
-	app(app)
+	app(app),
+	speedupCountdown(0)
 {
 	
 }
@@ -18,6 +20,13 @@ void EnemySpawner::tick()
 {
 	if(uRandomBool(this->spawnRate))
 		this->spawn();
+	
+	--this->speedupCountdown;
+	if(this->speedupCountdown <= 0)
+	{
+		this->spawnRate += this->speedupAmount;
+		this->speedupCountdown = this->speedupDelay;
+	}
 }
 
 void EnemySpawner::spawn()

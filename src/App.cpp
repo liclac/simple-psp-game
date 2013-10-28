@@ -100,6 +100,8 @@ void App::newGame()
 	enemySpawner->minSpeed = kEnemyMinSpeed;
 	enemySpawner->maxSpeed = kEnemyMaxSpeed;
 	enemySpawner->bulletSpeed = kEnemyBulletSpeed;
+	enemySpawner->speedupDelay = kEnemySpeedupDelay;
+	enemySpawner->speedupAmount = kEnemySpeedupAmount;
 	
 	if(powerupSpawner != 0) delete powerupSpawner;
 	powerupSpawner = new PowerupSpawner(this);

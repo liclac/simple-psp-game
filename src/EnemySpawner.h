@@ -14,6 +14,9 @@ public:
 	float minSpeed, maxSpeed;
 	float bulletSpeed;
 	
+	int speedupDelay;
+	float speedupAmount;
+	
 	OSL_IMAGE *image, *bulletImage;
 	
 	void tick();
@@ -21,6 +24,7 @@ public:
 	
 protected:
 	App *app;
+	int speedupCountdown;
 };
 
 #endif
