@@ -11,7 +11,7 @@ class Thing
 public:
 	
 	Thing(App *app, OSL_IMAGE *image = 0, OSL_IMAGE *bulletImage = 0);
-	virtual ~Thing() {};
+	virtual ~Thing();
 	
 	virtual void tick();
 	virtual void draw();
@@ -32,8 +32,8 @@ public:
 	float vx, vy;
 	int hp;
 	
-	inline int width() { return (this->image ? this->image->sizeX : this->_width); };
-	inline int height() { return (this->image ? this->image->sizeY : this->_height); };
+	int width() { return (this->image ? this->image->sizeX : this->_width); };
+	int height() { return (this->image ? this->image->sizeY : this->_height); };
 	
 	OSL_IMAGE *image, *bulletImage;
 	OSL_COLOR color;

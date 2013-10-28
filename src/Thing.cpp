@@ -13,6 +13,11 @@ Thing::Thing(App *app, OSL_IMAGE *image, OSL_IMAGE *bulletImage):
 	
 }
 
+Thing::~Thing()
+{
+	
+}
+
 void Thing::tick()
 {
 	this->x += this->vx;

@@ -1,6 +1,7 @@
 TARGET = SimpleGame
-OBJS   = src/main.o src/App.o src/EnemySpawner.o \
-			src/Thing.o src/Player.o src/Enemy.o src/Bullet.o \
+OBJS   = src/main.o src/App.o \
+			src/Thing.o src/Player.o src/Enemy.o src/Powerup.o src/Bullet.o \
+			src/EnemySpawner.o src/PowerupSpawner.o \
 			src/util.o
 
 INCDIR   = lib

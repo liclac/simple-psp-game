@@ -1,5 +1,6 @@
 #include "util.h"
 #include <climits>
+#include <iostream>
 
 static SceKernelUtilsMt19937Context ctx;
 
@@ -18,7 +19,9 @@ float uRandomFloatBetween(float min, float max)
 	return min + (float)sceKernelUtilsMt19937UInt(&ctx)/((float)UINT_MAX/(max-min));
 }
 
-bool uRandomBool(int percent)
+bool uRandomBool(float probability)
 {
-	return (sceKernelUtilsMt19937UInt(&ctx) % 100) < percent;
+	if(probability == 1)
+		return true;
+	return (sceKernelUtilsMt19937UInt(&ctx) / (float)UINT_MAX) < probability;
 }

@@ -6,7 +6,8 @@
 
 App::App(int argc, const char **argv):
 	score(0),
-	player(0)
+	player(0),
+	enemySpawner(0), powerupSpawner(0)
 {
 	uRandomInit(time(NULL));
 	srand(time(NULL)); // In case I need it... I sure hope not.
@@ -88,6 +89,7 @@ void App::newGame()
 	player->move((SCREEN_WIDTH - player->width())/2, (SCREEN_HEIGHT - player->height())/2);
 	
 	this->enemies.clear();
+	this->powerups.clear();
 	
 	if(enemySpawner != 0) delete enemySpawner;
 	enemySpawner = new EnemySpawner(this);
@@ -98,6 +100,13 @@ void App::newGame()
 	enemySpawner->minSpeed = kEnemyMinSpeed;
 	enemySpawner->maxSpeed = kEnemyMaxSpeed;
 	enemySpawner->bulletSpeed = kEnemyBulletSpeed;
+	
+	if(powerupSpawner != 0) delete powerupSpawner;
+	powerupSpawner = new PowerupSpawner(this);
+	powerupSpawner->image = this->loadImagePNG("img/bulle.png");
+	powerupSpawner->spawnRate = kPowerupSpawnRate;
+	powerupSpawner->minSpeed = kPowerupMinSpeed;
+	powerupSpawner->maxSpeed = kPowerupMaxSpeed;
 	
 	score = 0;
 	state = AppStatePlaying;
@@ -155,20 +164,33 @@ void App::tick()
 			
 			// Let objects update their states
 			player->tick();
-			std::deque<Enemy>::iterator it = enemies.begin();
-			while(it != enemies.end())
+			std::deque<Enemy>::iterator eit = enemies.begin();
+			while(eit != enemies.end())
 			{
-				Enemy &enemy = *it;
+				Enemy &enemy = *eit;
 				enemy.tick();
 				
 				if(enemy.x + enemy.width() < 0)
-					it = enemies.erase(it);
+					eit = enemies.erase(eit);
 				else
-					++it;
+					++eit;
 			}
 			
-			// Occasionally spawn enemies
+			std::deque<Powerup>::iterator pit = powerups.begin();
+			while(pit != powerups.end())
+			{
+				Powerup &powerup = *pit;
+				powerup.tick();
+				
+				if(powerup.x + powerup.width() < 0)
+					pit = powerups.erase(pit);
+				else
+					++pit;
+			}
+			
+			// Occasionally spawn enemies and powerups
 			enemySpawner->tick();
+			powerupSpawner->tick();
 		}
 	}
 	else if(this->state == AppStatePaused)
@@ -198,6 +220,8 @@ void App::draw()
 	
 	// Let objects draw themselves
 	for(std::deque<Enemy>::iterator it = enemies.begin(); it != enemies.end(); it++)
+		it->draw();
+	for(std::deque<Powerup>::iterator it = powerups.begin(); it != powerups.end(); it++)
 		it->draw();
 	player->draw();
 	

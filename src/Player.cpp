@@ -42,6 +42,17 @@ void Player::tick()
 		}
 	}
 	
+	// Check powerups
+	for(std::deque<Powerup>::iterator it = this->app->powerups.begin(); it != this->app->powerups.end(); it++)
+	{
+		Powerup &powerup = *it;
+		if(this->collidesWith(powerup))
+		{
+			this->app->score += 10;
+			powerup.hp = 0;
+		}
+	}
+	
 	// If we're not currently invincible, collission check the player too
 	if(invincibilityCountdown <= 0)
 	{

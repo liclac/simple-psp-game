@@ -10,7 +10,7 @@ public:
 	EnemySpawner(App *app);
 	virtual ~EnemySpawner();
 	
-	int spawnRate, fireRate;
+	float spawnRate, fireRate;
 	float minSpeed, maxSpeed;
 	float bulletSpeed;
 	
