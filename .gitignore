@@ -4,4 +4,6 @@
 *.prx
 *.elf
 .DS_Store
+*.sublime-project
+*.sublime-workspace
 
