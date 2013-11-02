@@ -53,7 +53,7 @@
 #define kEnemySpeedupAmount 0.001
 #define kEnemyBulletSpeed -2
 
-#define kPowerupSpawnRate 0.0001
+#define kPowerupSpawnRate 0.001
 #define kPowerupMinSpeed 1.5
 #define kPowerupMaxSpeed 2.5
 
