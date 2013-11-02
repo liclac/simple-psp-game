@@ -4,7 +4,9 @@
 Player::Player(App *app, OSL_IMAGE *image, OSL_IMAGE *bulletImage):
 	Thing(app, image, bulletImage),
 	weaponType(WeaponTypeStandard),
-	invincibilityCountdown(0)
+	invincibilityCountdown(0),
+	cX(0), cY(0), cWidth(0), cHeight(0),
+	strafing(false)
 {
 	this->hp = 3;
 }
@@ -76,22 +78,57 @@ void Player::tick()
 	}
 }
 
+bool Player::collidesWith(Thing &thing)
+{
+	if(this->hp == 0 || thing.hp == 0)
+		return false;
+	
+	return this->_collissionCheck(
+		this->x + this->cX, this->y + this->cY, this->x + this->cX + this->cWidth, this->y + this->cY + this->cHeight,
+		thing.x, thing.y, thing.x + thing.width(), thing.y + thing.height()
+	);
+}
+
+bool Player::collidesWith(Bullet &bullet)
+{
+	if(this->hp == 0 || bullet.parent->hp == 0)
+		return false;
+	
+	return this->_collissionCheck(
+		this->x + this->cX, this->y + this->cY, this->x + this->cX + this->cWidth, this->y + this->cY + this->cHeight,
+		bullet.x, bullet.y, bullet.x + bullet.width(), bullet.y + bullet.height()
+	);
+}
+
 void Player::drawSelf()
 {
 	if(invincibilityCountdown > 0)
 		oslSetAlpha(OSL_FX_ALPHA, 128);
 	
 	Thing::drawSelf();
+	
+	if(strafing)
+	{
+		oslDrawFillRect(
+			this->x + this->cX, this->y + this->cY,
+			this->x + this->cX + this->cWidth, this->y + this->cY + this->cHeight,
+			RGB(255,255,255)
+		);
+	}
 }
 
 void Player::checkMoveControls()
 {
 	int speed = kPlayerSpeed;
 	
-	// Halve speed if L or R is held down
-	if(osl_pad.held.L || osl_pad.held.R)
+	// "Strafe" with L and R
+	this->strafing = (osl_pad.held.L || osl_pad.held.R);
+	
+	// Halve speed if strafing
+	if(this->strafing)
 		speed = speed/2;
 	
+	// Switch weapons with Triangle
 	if(osl_pad.pressed.triangle)
 	{
 		this->weaponType++;
@@ -99,6 +136,7 @@ void Player::checkMoveControls()
 			weaponType = 0;
 	}
 	
+	// Move with the arrow keys
 	if(osl_pad.held.up) this->y -= speed;
 	if(osl_pad.held.down) this->y += speed;
 	if(osl_pad.held.left) this->x -= speed;

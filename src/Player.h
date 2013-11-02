@@ -17,10 +17,18 @@ public:
 	virtual ~Player();
 	
 	virtual void tick();
+	
+	// Reimplement these to allow for a custom hitbox
+	virtual bool collidesWith(Thing &thing);
+	virtual bool collidesWith(Bullet &bullet);
+	
 	virtual void drawSelf();
 	
 	int weaponType;
 	int invincibilityCountdown;
+	float cX, cY, cWidth, cHeight;
+	
+	bool strafing;
 	
 protected:
 	void checkMoveControls();

@@ -87,6 +87,10 @@ void App::newGame()
 	if(player != 0) delete player;
 	player = new Player(this, this->loadImagePNG("img/ship.png"), this->loadImagePNG("img/beam.png"));
 	player->move((SCREEN_WIDTH - player->width())/2, (SCREEN_HEIGHT - player->height())/2);
+	player->cX = 10;
+	player->cY = 8;
+	player->cWidth = 6;
+	player->cHeight = 4;
 	
 	this->enemies.clear();
 	this->powerups.clear();

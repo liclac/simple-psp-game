@@ -25,8 +25,8 @@ public:
 	void resize(int width, int height);
 	void resizeBy(int dwidth, int dheight);
 	
-	bool collidesWith(Thing &thing);
-	bool collidesWith(Bullet &bullet);
+	virtual bool collidesWith(Thing &thing);
+	virtual bool collidesWith(Bullet &bullet);
 	
 	float x, y;
 	float vx, vy;
