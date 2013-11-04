@@ -6,7 +6,8 @@
 
 EnemySpawner::EnemySpawner(App *app):
 	app(app),
-	speedupCountdown(0)
+	spawnSpeedupCountdown(0),
+	firstTick(true)
 {
 	
 }
@@ -21,11 +22,15 @@ void EnemySpawner::tick()
 	if(uRandomBool(this->spawnRate))
 		this->spawn();
 	
-	--this->speedupCountdown;
-	if(this->speedupCountdown <= 0)
+	if(this->firstTick)
 	{
-		this->spawnRate += this->speedupAmount;
-		this->speedupCountdown = this->speedupDelay;
+		this->spawnSpeedupCountdown = this->spawnSpeedupDelay;
+		this->firstTick = false;
+	}
+	else if(--this->spawnSpeedupCountdown <= 0)
+	{
+		this->spawnRate += this->spawnSpeedupAmount;
+		this->spawnSpeedupCountdown = this->spawnSpeedupDelay;
 	}
 }
 

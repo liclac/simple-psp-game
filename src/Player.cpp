@@ -107,7 +107,7 @@ void Player::drawSelf()
 	
 	Thing::drawSelf();
 	
-	if(strafing)
+	if(strafing && this->hp > 0)
 	{
 		oslDrawFillRect(
 			this->x + this->cX, this->y + this->cY,

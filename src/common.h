@@ -45,12 +45,12 @@
 #define kPlayerBulletSpeed 5
 #define kPlayerDeathInvFrames 60
 
-#define kEnemySpawnRate 0.01
+#define kEnemySpawnRate 0.005
+#define kEnemySpawnSpeedupDelay 120
+#define kEnemySpawnSpeedupAmount 0.001
 #define kEnemyFireRate 0.01
 #define kEnemyMinSpeed 1.0
 #define kEnemyMaxSpeed 2.0
-#define kEnemySpeedupDelay (60*2)
-#define kEnemySpeedupAmount 0.001
 #define kEnemyBulletSpeed -2
 
 #define kPowerupSpawnRate 0.001

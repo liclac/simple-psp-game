@@ -100,12 +100,12 @@ void App::newGame()
 	enemySpawner->image = this->loadImagePNG("img/enemy1.png");
 	enemySpawner->bulletImage = this->loadImagePNG("img/rocket.png");
 	enemySpawner->spawnRate = kEnemySpawnRate;
+	enemySpawner->spawnSpeedupDelay = kEnemySpawnSpeedupDelay;
+	enemySpawner->spawnSpeedupAmount = kEnemySpawnSpeedupAmount;
 	enemySpawner->fireRate = kEnemyFireRate;
 	enemySpawner->minSpeed = kEnemyMinSpeed;
 	enemySpawner->maxSpeed = kEnemyMaxSpeed;
 	enemySpawner->bulletSpeed = kEnemyBulletSpeed;
-	enemySpawner->speedupDelay = kEnemySpeedupDelay;
-	enemySpawner->speedupAmount = kEnemySpeedupAmount;
 	
 	if(powerupSpawner != 0) delete powerupSpawner;
 	powerupSpawner = new PowerupSpawner(this);

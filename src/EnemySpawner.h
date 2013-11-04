@@ -14,8 +14,8 @@ public:
 	float minSpeed, maxSpeed;
 	float bulletSpeed;
 	
-	int speedupDelay;
-	float speedupAmount;
+	int spawnSpeedupDelay;
+	float spawnSpeedupAmount;
 	
 	OSL_IMAGE *image, *bulletImage;
 	
@@ -24,7 +24,8 @@ public:
 	
 protected:
 	App *app;
-	int speedupCountdown;
+	int spawnSpeedupCountdown;
+	bool firstTick;
 };
 
 #endif
